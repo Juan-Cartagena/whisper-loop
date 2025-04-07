@@ -1,27 +1,51 @@
 import os
 import whisper
+import subprocess
+import time
+
+def obtener_duracion_video(ruta_video):
+    """Retorna la duración del video en segundos usando ffprobe."""
+    try:
+        resultado = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries",
+             "format=duration", "-of",
+             "default=noprint_wrappers=1:nokey=1", ruta_video],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        return float(resultado.stdout)
+    except Exception as e:
+        print(f"No se pudo obtener la duración del video: {e}")
+        return 0.0
 
 def transcribir_videos(directorio, salida):
-    model = whisper.load_model("medium")  # Puedes usar "small" o "large" según tus recursos
+    model_name = "small"  # Cambia a "medium" o "large" si es necesario
+    model = whisper.load_model(model_name)
 
-    # Buscar todos los archivos de video en la carpeta
     for archivo in os.listdir(directorio):
         if archivo.lower().endswith((".mp4", ".mov", ".mkv", ".avi", ".flv", ".webm")):
             ruta_video = os.path.join(directorio, archivo)
             nombre_base = os.path.splitext(archivo)[0]
             archivo_salida = os.path.join(salida, f"{nombre_base}.srt")
 
-            print(f"Transcribiendo {ruta_video}...")
-            resultado = model.transcribe(ruta_video, task="transcribe", fp16=False)
+            duracion = obtener_duracion_video(ruta_video)
+            print(f"\n📁 Procesando: {archivo}")
+            print(f"🕒 Duración del video: {duracion:.2f} segundos")
+            print(f"🧠 Modelo usado: Whisper {model_name}")
 
-            # Guardar en formato SRT
+            inicio = time.time()
+            resultado = model.transcribe(ruta_video, task="transcribe", fp16=False)
+            fin = time.time()
+            tiempo_transcripcion = fin - inicio
+
             with open(archivo_salida, "w", encoding="utf-8") as f:
                 for segmento in resultado["segments"]:
                     f.write(f"{segmento['id'] + 1}\n")
                     f.write(f"{formatear_tiempo(segmento['start'])} --> {formatear_tiempo(segmento['end'])}\n")
                     f.write(f"{segmento['text'].strip()}\n\n")
 
-            print(f"Subtítulos guardados en {archivo_salida}")
+            print(f"✅ Subtítulos guardados en: {archivo_salida}")
+            print(f"⏱️ Tiempo de transcripción: {tiempo_transcripcion:.2f} segundos")
 
 def formatear_tiempo(segundos):
     horas = int(segundos // 3600)

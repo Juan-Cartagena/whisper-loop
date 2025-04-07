@@ -1,2 +1,5 @@
-/videos/
-/subtitulos/
+videos/*
+!videos/.gitkeep
+
+subtitulos/*
+!subtitulos/.gitkeep
