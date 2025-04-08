@@ -1,22 +1,27 @@
 
-# 🗣️ Whisper Transcriber - Instalación y Uso
+# 🗣️ Whisper Transcriber - Setup Guide (macOS & Windows)
 
-Este proyecto utiliza [OpenAI Whisper](https://github.com/openai/whisper) para transcribir archivos de audio o video a texto de forma automática. A continuación encontrarás los pasos para instalarlo en **macOS** y **Windows**, asegurando compatibilidad sin afectar otras versiones de Python instaladas en el sistema (como Python 3.13).
+This guide covers the exact steps we followed in this chat to install and run [OpenAI Whisper](https://github.com/openai/whisper) on **macOS** and **Windows**, using a virtual environment and avoiding interference with an existing Python 3.13 installation.
 
 ---
 
-## ✅ Requisitos
+## ✅ Requirements
 
-- Python 3.8 - 3.11 (NO es compatible con Python 3.13)
+- Python 3.8 - 3.11 (Whisper is not compatible with Python 3.13)
 - FFmpeg
 - pip
 
 ---
 
-## 📦 Instalación en macOS
+## 🍎 macOS Setup
 
-### 1. Instalar Python 3.10 (sin afectar el sistema)
-Usamos `pyenv` para manejar múltiples versiones de Python.
+### 1. Install Homebrew (if not already installed)
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+### 2. Install Python 3.10 with pyenv (recommended)
 
 ```bash
 brew install pyenv
@@ -25,25 +30,20 @@ pyenv virtualenv 3.10.12 whisper-env
 pyenv activate whisper-env
 ```
 
-> Si no tienes Homebrew:
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-### 2. Instalar FFmpeg
-
-```bash
-brew install ffmpeg
-```
-
-### 3. Clonar el proyecto y crear entorno virtual (si no usas pyenv)
+Or manually create a virtual environment:
 
 ```bash
 python3.10 -m venv whisper-env
 source whisper-env/bin/activate
 ```
 
-### 4. Instalar dependencias
+### 3. Install FFmpeg
+
+```bash
+brew install ffmpeg
+```
+
+### 4. Install dependencies
 
 ```bash
 pip install --upgrade pip setuptools wheel
@@ -53,34 +53,34 @@ pip install git+https://github.com/openai/whisper.git
 
 ---
 
-## 🪟 Instalación en Windows
+## 🪟 Windows Setup
 
-### 1. Instalar Python 3.10 o 3.11 desde:
-👉 https://www.python.org/downloads/
+### 1. Install Python 3.10 or 3.11
+Download from: https://www.python.org/downloads/
 
-> ⚠️ Asegúrate de activar la casilla **"Add Python to PATH"** durante la instalación.
+> ✅ Make sure to check "Add Python to PATH" during installation.
 
-### 2. Crear entorno virtual sin afectar Python 3.13
+### 2. Create a virtual environment without affecting Python 3.13
 
 ```cmd
 py -3.10 -m venv whisper-env
 whisper-env\Scripts\activate
 ```
 
-### 3. Instalar FFmpeg
+### 3. Install FFmpeg
 
-1. Descargar desde: https://www.gyan.dev/ffmpeg/builds/
-2. Extraer y copiar la ruta del directorio `bin` (por ejemplo: `C:\ffmpeg\bin`)
-3. Agregar esa ruta a la variable de entorno **PATH**:
-   - Panel de control → Sistema → Configuración avanzada del sistema → Variables de entorno → Editar `Path`
+1. Download FFmpeg from: https://www.gyan.dev/ffmpeg/builds/
+2. Extract and copy the `bin` path (e.g., `C:\ffmpeg\bin`)
+3. Add it to your system environment **Path** variable:
+   - Control Panel → System → Advanced system settings → Environment Variables → Edit `Path`
 
-4. Verifica con:
+4. Confirm installation:
 
 ```cmd
 ffmpeg -version
 ```
 
-### 4. Instalar dependencias
+### 4. Install dependencies
 
 ```cmd
 pip install --upgrade pip setuptools wheel
@@ -90,49 +90,18 @@ pip install git+https://github.com/openai/whisper.git
 
 ---
 
-## 🎬 Cómo usar
+## ✅ Test Your Setup
 
-Con el entorno virtual activado:
+With the virtual environment active, run your script or:
 
 ```bash
-whisper ruta/al/archivo.mp3 --model medium --language Spanish
-```
-
-Para uso dentro de scripts Python, asegúrate de que el entorno esté activo y usa:
-
-```python
-import whisper
-model = whisper.load_model("medium")
-result = model.transcribe("archivo.mp3", language="Spanish")
-print(result["text"])
+whisper yourfile.mp3 --model medium --language English
 ```
 
 ---
 
-## 🧹 Recomendación
-
-Cuando termines de usar el entorno virtual, puedes desactivarlo con:
+## 🧹 Deactivate Environment
 
 ```bash
 deactivate
 ```
-
----
-
-## 📂 Estructura sugerida del proyecto
-
-```
-whisper-loop/
-├── whisper-env/         # Entorno virtual (exclúyelo del repositorio)
-├── transcribir_videos.py
-├── README.md
-```
-
-> Recuerda agregar `whisper-env/` a tu archivo `.gitignore`.
-
----
-
-## 🚀 Créditos
-
-- [OpenAI Whisper](https://github.com/openai/whisper)
-- [FFmpeg](https://ffmpeg.org/)
