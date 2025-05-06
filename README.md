@@ -19,6 +19,11 @@ This guide covers the exact steps we followed in this chat to install and run [O
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+echo >> /Users/cartagenacorp/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/cartagenacorp/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+brew help
 ```
 
 ### 2. Install Python 3.10 with pyenv (recommended)
