@@ -1,5 +1,4 @@
-
-# 🗣️ Whisper Transcriber - Setup Guide (macOS & Windows)
+# 🔣 Whisper Transcriber - Setup Guide (macOS & Windows)
 
 This guide covers the exact steps we followed in this chat to install and run [OpenAI Whisper](https://github.com/openai/whisper) on **macOS** and **Windows**, using a virtual environment and avoiding interference with an existing Python 3.13 installation.
 
@@ -7,9 +6,9 @@ This guide covers the exact steps we followed in this chat to install and run [O
 
 ## ✅ Requirements
 
-- Python 3.8 - 3.11 (Whisper is not compatible with Python 3.13)
-- FFmpeg
-- pip
+* Python 3.8 - 3.11 (Whisper is not compatible with Python 3.13)
+* FFmpeg
+* pip
 
 ---
 
@@ -19,23 +18,36 @@ This guide covers the exact steps we followed in this chat to install and run [O
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-echo >> /Users/cartagenacorp/.zprofile
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/cartagenacorp/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-brew help
 ```
 
 ### 2. Install Python 3.10 with pyenv (recommended)
 
 ```bash
-brew install pyenv
+brew install pyenv pyenv-virtualenv
+```
+
+Add the following lines to your shell configuration file (`~/.zshrc` or `~/.bashrc`) if not already present:
+
+```bash
+eval "$(pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+Then reload your shell:
+
+```bash
+source ~/.zshrc  # or source ~/.bashrc
+```
+
+Now install Python and create the virtual environment:
+
+```bash
 pyenv install 3.10.12
 pyenv virtualenv 3.10.12 whisper-env
 pyenv activate whisper-env
 ```
 
-Or manually create a virtual environment:
+Or manually create a virtual environment (if you prefer not to use pyenv-virtualenv):
 
 ```bash
 python3.10 -m venv whisper-env
@@ -61,7 +73,8 @@ pip install git+https://github.com/openai/whisper.git
 ## 🪟 Windows Setup
 
 ### 1. Install Python 3.10 or 3.11
-Download from: https://www.python.org/downloads/
+
+Download from: [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
 > ✅ Make sure to check "Add Python to PATH" during installation.
 
@@ -74,10 +87,13 @@ whisper-env\Scripts\activate
 
 ### 3. Install FFmpeg
 
-1. Download FFmpeg from: https://www.gyan.dev/ffmpeg/builds/
+1. Download FFmpeg from: [https://www.gyan.dev/ffmpeg/builds/](https://www.gyan.dev/ffmpeg/builds/)
+
 2. Extract and copy the `bin` path (e.g., `C:\ffmpeg\bin`)
+
 3. Add it to your system environment **Path** variable:
-   - Control Panel → System → Advanced system settings → Environment Variables → Edit `Path`
+
+   * Control Panel → System → Advanced system settings → Environment Variables → Edit `Path`
 
 4. Confirm installation:
 
